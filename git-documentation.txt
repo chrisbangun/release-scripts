@@ -1,0 +1,21 @@
+Git is how we communicate as a team of developers
+
+cd .git/
+git config --local user.email "adi.chris@traveloka.com"
+
+everything in git is an object
+
+git log --oneline --decorate --all --graph
+
+> git merge
+    ++ conflict
+> git status
+
+
+git config --local rerere.enabled true
+
+try new process for hotfix and relesae
+
+1. request review. Once developers land their work to release, do they need to request review to develop? (it would be great if they don't have to do that)
+2. Make sure every hotfix is land to both release and develop
+3. Thus, no need to merge branch release to develop
