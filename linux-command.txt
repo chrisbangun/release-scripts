@@ -1,0 +1,15 @@
+======================== List of Linux Command =================================
+1. du -sh * | sort -h
+   check/estimate file usage
+2. db.users.find({"name": /.*m.*/})
+   searching in mongo command line
+3. mongoexport --db seyren --collection checks --fields _id,allowNoData,description  --csv > test.csv
+   exporting mongodb to csv
+4. rsync" --exclude='.git/' --exclude='*~' stop-tripops staging02:/usr/bin/stop-tripops
+5. nohup bin/zookeeper-server-start.sh config/zookeeper.properties &
+   start zookeepr
+6. nohup bin/kafka-server-start.sh config/server.properties &
+   start kafka
+7. bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic flight.crossSellingFlightIssued
+   create topic
+8. scp -3 staging06:/home/ubuntu/mongodump/dump/$tar_name $staging:/home/ubuntu/mongodump/dump/backup`    
