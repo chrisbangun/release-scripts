@@ -1,24 +1,35 @@
 #!/bin/bash
 
-declare -a commands=("/sync-config" "/sync-data" "/dump")
+
+declare -A commands
+commands=( ["sync_config_command_util"]="/sync-config" ["sync_data_to_staging"]="/sync-data" ["dump"]="/dump" )
 
 function welcome {
   echo " USAGE: "
   echo "        /sync-config production mongoscript02"
   echo "        /sync-config stagingXX Domain"
-  echo "        /sync-data stagingXX DB [collection]"
+  echo "        /sync-data stagingXX <DB_NAME> <COLLECTION>"
   echo "        /dump <DB_NAME> e.g. traveloka-data"
 }
 
-
 function sync_config_prod_mongoscript02 {
-  ssh mongoscript02 "mongo < mongodata-config-sync.js" < /dev/null
-  ssh mongoscript02 "mongo < mongocache-config-sync.js" < /dev/null
-  ssh mongoscript02 "mongo < mongofb-config-sync.js" < /dev/null
-  exit
+  #sync all the configs
+  ssh mongoscript02 "mongo < /home/ubuntu/mongo-dump/config-sync-script/mongodata-config-sync.js" < /dev/null
+  ssh mongoscript02 "mongo < /home/ubuntu/mongo-dump/config-sync-script/mongocache-config-sync.js" < /dev/null
+  ssh mongoscript02 "mongo < /home/ubuntu/mongo-dump/config-sync-script/geodata-mongod-config-sync.js" < /dev/null
+  ssh mongoscript02 "mongo < /home/ubuntu/mongo-dump/config-sync-script/mongofb-config-sync.js" < /dev/null
+  ssh mongoscript02 "mongo < /home/ubuntu/mongo-dump/config-sync-script/hdata-mongod-config-sync.js" < /dev/null
+  ssh mongoscript02 "mongo < /home/ubuntu/mongo-dump/config-sync-script/mongodwh-config-sync.js" < /dev/null
+  ssh mongoscript02 "mongo < /home/ubuntu/mongo-dump/config-sync-script/mongohnet-config-sync.js" < /dev/null
+  ssh mongoscript02 "mongo < /home/ubuntu/mongo-dump/config-sync-script/mongohotel-config-sync.js" < /dev/null
+  ssh mongoscript02 "mongo < /home/ubuntu/mongo-dump/config-sync-script/mongosdim-config-sync.js" < /dev/null
+  ssh mongoscript02 "mongo < /home/ubuntu/mongo-dump/config-sync-script/mongostrack-config-sync.js" < /dev/null
 }
 
 function sync_config_staging {
+  # mongodump --db=<old_db_name> --collection=<collection_name> --out=data/
+  # mongorestore --db=<new_db_name> --collection=<collection_name> data/<db_name>/<collection_name>.bson
+
   STAGING=${command_arr[1]}
   DOMAIN=${command_arr[2]}
   bash ./sync-config.sh $STAGING $DOMAIN
@@ -62,6 +73,7 @@ function sync_data_to_staging {
 }
 
 function dump {
+  echo "here"
   db=${command_arr[1]}
   ssh mongoscript02 "bash /home/ubuntu/mongo-dump/mongodump-script.sh $db" < /dev/null
 }
@@ -74,26 +86,22 @@ function sync_config_command_util {
   fi
 }
 
-answer=""
-array_length=${#commands[@]}
-welcome
+input_command=""
 
-while [ "$answer" != "done" ] && [ "$answer" != "exit" ]
+while [ "$input_command" != "done" ] && [ "$input_command" != "exit" ]
 do
+  welcome
   read -p "> " input_command;
   command_arr=($input_command)
   sync_config="/sync-config"
   sync_data="/sync-data"
   dump="/dump"
 
-  if [[ ${command_arr[0]} == ${sync_data} ]]; then
-    sync_data_to_staging $command_arr
-  elif [[ ${command_arr[0]} == ${sync_config} ]]; then
-    sync_config_command_util $command_arr
-  elif [[ ${command_arr[0]} == ${dump} ]]; then
-    dump $command_arr
-  else
-    exit
-  fi
+  for funct in "${!commands[@]}"
+  do
+    if [ "${commands[$funct]}" == "${command_arr[0]}" ]; then
+      $funct $command_arr
+    fi
+  done
 
 done
