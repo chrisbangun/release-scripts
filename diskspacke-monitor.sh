@@ -12,7 +12,7 @@
 # Linux shell script to watch disk space (should work on other UNIX oses )
 # SEE URL: http://www.cyberciti.biz/tips/shell-script-to-watch-the-disk-space.html
 # set admin email so that you can get email
-ADMIN="adi.chris@traveloka.com"
+ADMIN="me@gmail.com"
 # set alert level 90% is default
 ALERT=90
 df -H | grep -vE '^Filesystem|tmpfs|cdrom' | awk '{ print $5 " " $1 }' | while read output;
