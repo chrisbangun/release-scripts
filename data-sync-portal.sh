@@ -6,10 +6,10 @@ commands=( ["sync_config_command_util"]="/sync-config" ["sync_data_to_staging"]=
 
 function welcome {
   echo " USAGE: "
-  echo "        /sync-config production mongoscript02"
+  echo "        /sync-config production instance"
   echo "        /sync-config stagingXX Domain"
   echo "        /sync-data stagingXX <DB_NAME> <COLLECTION>"
-  echo "        /dump <DB_NAME> e.g. traveloka-data"
+  echo "        /dump <DB_NAME>"
 }
 
 function sync_config_prod_mongoscript02 {
@@ -54,9 +54,6 @@ function sync_data_to_staging {
     echo "usage : "
     echo "  sync-mongo.sh <STAGING_NAME> <DB_NAME>"
     echo "  DB_NAME : "
-    echo "    traveloka-asset"
-    echo "    traveloka-data"
-    echo "    traveloka-agent"
     echo "    <<all other database you want to sync>>"
     exit
   fi
