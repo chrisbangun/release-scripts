@@ -12,21 +12,13 @@ function welcome {
 
 
 function sync_config_prod_mongoscript02 {
-  #haven't been tested
-  #sync all the configs
   ssh mongoscript02 "mongo < mongodata-config-sync.js" < /dev/null
   ssh mongoscript02 "mongo < mongocache-config-sync.js" < /dev/null
   ssh mongoscript02 "mongo < mongofb-config-sync.js" < /dev/null
-  #TO DO
-  # create more js for config sync from production to mongoscript02
-  echo "sync_config_prod_mongoscript02 is called"
   exit
 }
 
 function sync_config_staging {
-    # mongodump --db=<old_db_name> --collection=<collection_name> --out=data/
-  # mongorestore --db=<new_db_name> --collection=<collection_name> data/<db_name>/<collection_name>.bson
-
   STAGING=${command_arr[1]}
   DOMAIN=${command_arr[2]}
   bash ./sync-config.sh $STAGING $DOMAIN
