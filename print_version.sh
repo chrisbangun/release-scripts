@@ -3,8 +3,8 @@
 
 print_version_all(){
   
-  services=("tv" "fops" "hops" "tripops" "pg" "fb" "frs" "hinv" "ne" "nei" "tap")
-  servicesProduction=("tv10" "fops01" "hops-app-01" "tripops-app-02" "payment01x" "fb04" "frs14" "hinv01" "ne04" "nei04" "tap01")
+  services=("" "" "")
+  servicesProduction=("" "" "")
   
   if [ "$2" == "production" ]; then
     i=0
